@@ -2,20 +2,21 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { apiFetch } from "@/lib/apiFetch";
 
 function Converter() {
   const [file, setFile] = useState<File | null>(null);
-  const [isComplete, setIsComplete] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [showHover, setShowHover] = useState(false);
-  const [isConverting, setIsConverting] = useState(false);
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [showHover, setShowHover] = useState<boolean>(false);
+  const [isConverting, setIsConverting] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<string>("");
   const [convertedFile, setConvertedFile] = useState<File | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
-  const [converted, setConverted] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [filename, setFilename] = useState("");
+  const [converted, setConverted] = useState<boolean>(false);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [filename, setFilename] = useState<string>("");
+  const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +25,9 @@ function Converter() {
     const selectedFile = e.target.files?.[0];
 
     if (selectedFile) {
+      const url = URL.createObjectURL(selectedFile);
       setFile(selectedFile);
+      setPreviewImgUrl(url);
       setIsComplete(true);
       setErrMsg("");
     } else {
@@ -112,25 +115,20 @@ function Converter() {
     formData.append("file", file);
 
     try {
-      // Step 1: Get download URL from conversion endpoint
-      const response = await fetch(
-        "http://localhost:8000/api/v1/convert/png-to-pdf",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await apiFetch("/api/v1/convert/png-to-pdf", {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
-        throw new Error("Error");
+        throw new Error("API failed to fetch");
       }
 
       const data = await response.json();
       setDownloadUrl(data.download_url);
       setFilename(data.filename);
 
-      // Step 2: Fetch the actual file from the download URL
-      const fileResponse = await fetch(`http://localhost:8000${downloadUrl}`, {
+      const fileResponse = await apiFetch(data.download_url, {
         method: "POST",
       });
 
@@ -138,27 +136,46 @@ function Converter() {
         throw new Error("Failed to fetch converted file");
       }
 
-      // Step 4: Get the blob and create a File object
       const fileBlob = await fileResponse.blob();
-      const convertedFileObj = new File([fileBlob], filename, {
+      const convertedFileObj = new File([fileBlob], data.filename, {
         type: fileBlob.type,
         lastModified: Date.now(),
       });
+
       setConvertedFile(convertedFileObj);
       setIsConverting(false);
       setConverted(true);
-    } catch (error) {
+      toast.success(data.message || "File has been converted successfully");
+    } catch (error: any) {
       console.error("Error while converting", error);
+
+      let errorMessage = "Failed while converting";
+
+      if (error instanceof Response) {
+        try {
+          const errorData = await error.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (e) {
+          console.error("Failed to parse error JSON", e);
+        }
+      }
+
       setConverted(false);
       setConvertedFile(null);
       setIsConverting(false);
+      toast.error(errorMessage);
     }
   };
 
   const handleDownload = async () => {
     setIsDownloading(true);
+
+    if (!downloadUrl) {
+      throw new Error("Download URL is not set");
+    }
+
     try {
-      const response = await fetch(`http://localhost:8000${downloadUrl}`, {
+      const response = await apiFetch(downloadUrl, {
         method: "POST",
       });
       const blob = await response.blob();
@@ -169,9 +186,11 @@ function Converter() {
       a.click();
       window.URL.revokeObjectURL(url);
       setIsDownloading(false);
+      toast.success("Download Successful");
     } catch (error) {
       console.error("Error downloadind", error);
       setIsDownloading(false);
+      toast.error("Failed to download.");
     }
   };
 
@@ -184,18 +203,30 @@ function Converter() {
               <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#F97316]/5 hover:border-[#F97316] transition ease-in-out delay-150">
                 <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
                   <span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="62"
-                      height="62"
-                      viewBox="0 0 62 62"
-                      fill="none"
-                    >
-                      <path
-                        d="M23.2501 33.5832V12.9165C23.2501 10.0748 25.5751 7.74984 28.4167 7.74984H51.6667C54.5084 7.74984 56.8334 10.0748 56.8334 12.9165V28.4165H47.9726L44.6659 23.9215C44.6338 23.868 44.5883 23.8237 44.534 23.793C44.4797 23.7623 44.4183 23.7461 44.3559 23.7461C44.2935 23.7461 44.2321 23.7623 44.1778 23.793C44.1235 23.8237 44.0781 23.868 44.0459 23.9215L38.9051 30.9998C38.7501 31.1548 38.4401 31.1807 38.2851 30.9998L34.5909 26.479C34.5541 26.4364 34.5084 26.4021 34.4572 26.3787C34.4059 26.3552 34.3502 26.3431 34.2938 26.3431C34.2375 26.3431 34.1817 26.3552 34.1305 26.3787C34.0792 26.4021 34.0336 26.4364 33.9967 26.479L28.5459 33.3507C28.3392 33.5832 28.5201 33.9707 28.8301 33.9707H45.2084V38.7498H28.4167C25.5492 38.7498 23.2501 36.4507 23.2501 33.5832ZM15.5001 56.8332V54.2498H10.3334V56.8332H5.16675V5.1665H10.3334V7.74984H15.5001V5.1665H21.6742C19.4784 7.07817 18.0834 9.8165 18.0834 12.9165V33.5832C18.0834 39.2923 22.7076 43.9165 28.4167 43.9165H40.5584C37.8976 46.0607 36.1667 49.2898 36.1667 52.9582C36.1667 54.3273 36.4509 55.619 36.8901 56.8332H15.5001ZM10.3334 18.0832H15.5001V12.9165H10.3334V18.0832ZM10.3334 28.4165H15.5001V23.2498H10.3334V28.4165ZM10.3334 38.7498H15.5001V33.5832H10.3334V38.7498ZM15.5001 49.0832V43.9165H10.3334V49.0832H15.5001ZM59.4167 33.5832V38.7498H54.2501V52.9582C54.2501 54.671 53.5697 56.3137 52.3585 57.5249C51.1473 58.7361 49.5046 59.4165 47.7917 59.4165C46.0789 59.4165 44.4362 58.7361 43.225 57.5249C42.0138 56.3137 41.3334 54.671 41.3334 52.9582C41.334 51.8861 41.6014 50.831 42.1116 49.8881C42.6218 48.9452 43.3586 48.1441 44.2558 47.5572C45.1529 46.9702 46.182 46.6158 47.2503 46.5259C48.3186 46.436 49.3925 46.6135 50.3751 47.0423V33.5832H59.4167Z"
-                        fill="#475467"
+                    {previewImgUrl ? (
+                      <img
+                        src={previewImgUrl}
+                        alt="Preview"
+                        style={{
+                          width: "300px",
+                          borderRadius: "8px",
+                          marginTop: "1rem",
+                        }}
                       />
-                    </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="62"
+                        height="62"
+                        viewBox="0 0 62 62"
+                        fill="none"
+                      >
+                        <path
+                          d="M23.2501 33.5832V12.9165C23.2501 10.0748 25.5751 7.74984 28.4167 7.74984H51.6667C54.5084 7.74984 56.8334 10.0748 56.8334 12.9165V28.4165H47.9726L44.6659 23.9215C44.6338 23.868 44.5883 23.8237 44.534 23.793C44.4797 23.7623 44.4183 23.7461 44.3559 23.7461C44.2935 23.7461 44.2321 23.7623 44.1778 23.793C44.1235 23.8237 44.0781 23.868 44.0459 23.9215L38.9051 30.9998C38.7501 31.1548 38.4401 31.1807 38.2851 30.9998L34.5909 26.479C34.5541 26.4364 34.5084 26.4021 34.4572 26.3787C34.4059 26.3552 34.3502 26.3431 34.2938 26.3431C34.2375 26.3431 34.1817 26.3552 34.1305 26.3787C34.0792 26.4021 34.0336 26.4364 33.9967 26.479L28.5459 33.3507C28.3392 33.5832 28.5201 33.9707 28.8301 33.9707H45.2084V38.7498H28.4167C25.5492 38.7498 23.2501 36.4507 23.2501 33.5832ZM15.5001 56.8332V54.2498H10.3334V56.8332H5.16675V5.1665H10.3334V7.74984H15.5001V5.1665H21.6742C19.4784 7.07817 18.0834 9.8165 18.0834 12.9165V33.5832C18.0834 39.2923 22.7076 43.9165 28.4167 43.9165H40.5584C37.8976 46.0607 36.1667 49.2898 36.1667 52.9582C36.1667 54.3273 36.4509 55.619 36.8901 56.8332H15.5001ZM10.3334 18.0832H15.5001V12.9165H10.3334V18.0832ZM10.3334 28.4165H15.5001V23.2498H10.3334V28.4165ZM10.3334 38.7498H15.5001V33.5832H10.3334V38.7498ZM15.5001 49.0832V43.9165H10.3334V49.0832H15.5001ZM59.4167 33.5832V38.7498H54.2501V52.9582C54.2501 54.671 53.5697 56.3137 52.3585 57.5249C51.1473 58.7361 49.5046 59.4165 47.7917 59.4165C46.0789 59.4165 44.4362 58.7361 43.225 57.5249C42.0138 56.3137 41.3334 54.671 41.3334 52.9582C41.334 51.8861 41.6014 50.831 42.1116 49.8881C42.6218 48.9452 43.3586 48.1441 44.2558 47.5572C45.1529 46.9702 46.182 46.6158 47.2503 46.5259C48.3186 46.436 49.3925 46.6135 50.3751 47.0423V33.5832H59.4167Z"
+                          fill="#475467"
+                        />
+                      </svg>
+                    )}
                   </span>
                   <div>
                     <p className="text-base md:text-xl text-left font-bold text-[#292D32] mb-2">
