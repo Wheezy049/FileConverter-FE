@@ -275,7 +275,7 @@ function Converter() {
       setIsConverting(false);
       setConverted(true);
       toast.success(data.message || "File has been converted successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error while converting", error);
 
       let errorMessage = "Failed while converting";
