@@ -28,7 +28,7 @@ npm
 
 1. Clone the repository
 ```bash
-git clone https://github.com/Wheezy049/FileConverter-FE
+git clone https://github.com/Wheezy049/FileConverter-FE.git
 cd file-converter-frontend
 ```
 
