@@ -1,7 +1,8 @@
 import React from 'react'
-import Navbar from './Navbar'
 import Hero from './Hero'
 import Converter from './Converter'
+import Navbar from './Navbar'
+import Footer from './Footer'
 
 function HomeLayout() {
   return (
@@ -9,6 +10,7 @@ function HomeLayout() {
       <Navbar />
       <Hero />
       <Converter />
+      <Footer />
     </div>
   )
 }

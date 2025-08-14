@@ -1,12 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
+import ToolLink from "./ToolLink";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const toolsDropdownTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,16 +23,29 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleToolsMouseEnter = () => {
+    if (toolsDropdownTimeout.current) {
+      clearTimeout(toolsDropdownTimeout.current);
+    }
+    setIsDropdownOpen(true);
+  };
+
+  const handleToolsMouseLeave = () => {
+    toolsDropdownTimeout.current = setTimeout(() => {
+      setIsDropdownOpen(false);
+    }, 300);
+  };
+
   return (
     <div
-      className={`fixed top-0 w-full z-50 bg-[#FFF] p-5 md:py-5 lg:px-14 md:px-5 gap-12 ${
-        scrolled ? "bg-[#fff] shadow-md" : ""
-      }`}
+      className={`fixed top-0 w-full z-50 bg-[#FFF] p-5 md:py-5 lg:px-14 md:px-5 gap-12 ${scrolled ? "bg-[#fff] shadow-md" : ""
+        }`}
     >
       <div className="max-w-[1200px] mx-auto flex justify-between items-center">
-        <Link href="/">
+        <Link href="/" className="flex gap-1 items-center">
+          <Image src="/flexiconvert.svg" alt="logo" height={10} width={50} className="h-[30px] md:h-[40px] " />
           <h1 className=" text-2xl sm:text-3xl md:text-4xl font-semibold cursor-pointer">
-            File Converter
+            FlexiConvert
           </h1>
         </Link>
 
@@ -35,33 +53,31 @@ function Navbar() {
         <nav className="hidden md:flex justify-between items-center gap-3 lg:gap-12 lg:text-lg md:text-sm">
           <Link
             href="/"
-            className={`hover:text-[#F97316] ${
-              pathname === "/" ? "text-[#F97316]" : ""
-            }`}
+            className={`hover:text-[#4A90E2] ${pathname === "/" ? "text-[#4A90E2]" : ""
+              }`}
           >
             Home
           </Link>
           <Link
             href="/pricing"
-            className={`hover:text-[#F97316] ${
-              pathname === "/pricing" ? "text-[#F97316]" : ""
-            }`}
+            className={`hover:text-[#4A90E2] ${pathname === "/pricing" ? "text-[#4A90E2]" : ""
+              }`}
           >
             Pricing
           </Link>
           <Link
+            onMouseEnter={handleToolsMouseEnter}
+            onMouseLeave={handleToolsMouseLeave}
             href="/tools"
-            className={`flex items-center hover:text-[#F97316] ${
-              pathname === "/tools" ? "text-[#F97316]" : ""
-            }`}
+            className={`flex items-center hover:text-[#4A90E2] ${pathname === "/tools" ? "text-[#4A90E2]" : ""
+              }`}
           >
-            Tools
+            Tools <ChevronDown className="ml-1" />
           </Link>
           <Link
             href="/about"
-            className={`hover:text-[#F97316] ${
-              pathname === "/about" ? "text-[#F97316]" : ""
-            }`}
+            className={`hover:text-[#4A90E2] ${pathname === "/about" ? "text-[#4A90E2]" : ""
+              }`}
           >
             About
           </Link>
@@ -75,10 +91,10 @@ function Navbar() {
             Login
           </Link>
           <Link
-            href="/get-started"
-            className="md:py-2 md:px-4 lg:py-3 lg:px-6 rounded-[32px] bg-[#F97316] text-white hover:bg-[#F97316]/80"
+            href="/signup"
+            className="md:py-2 md:px-4 lg:py-3 lg:px-6 rounded-[32px] bg-[#4A90E2] text-white hover:bg-[#3A78BA]"
           >
-            Get started
+            Sign Up
           </Link>
         </div>
 
@@ -116,36 +132,32 @@ function Navbar() {
           <Link
             href="/"
             onClick={() => setIsMenuOpen(false)}
-            className={`block text-lg hover:text-[#F97316] ${
-              pathname === "/" ? "text-[#F97316]" : ""
-            }`}
+            className={`block text-lg hover:text-[#4A90E2] ${pathname === "/" ? "text-[#4A90E2]" : ""
+              }`}
           >
             Home
           </Link>
           <Link
             href="/pricing"
             onClick={() => setIsMenuOpen(false)}
-            className={`block text-lg hover:text-[#F97316] ${
-              pathname === "/pricing" ? "text-[#F97316]" : ""
-            }`}
+            className={`block text-lg hover:text-[#4A90E2] ${pathname === "/pricing" ? "text-[#4A90E2]" : ""
+              }`}
           >
             Pricing
           </Link>
           <Link
             href="/tools"
             onClick={() => setIsMenuOpen(false)}
-            className={`block text-lg hover:text-[#F97316] ${
-              pathname === "/tools" ? "text-[#F97316]" : ""
-            }`}
+            className={`block text-lg hover:text-[#4A90E2] ${pathname === "/tools" ? "text-[#4A90E2]" : ""
+              }`}
           >
             Tools
           </Link>
           <Link
             href="/about"
             onClick={() => setIsMenuOpen(false)}
-            className={`block text-lg hover:text-[#F97316] ${
-              pathname === "/about" ? "text-[#F97316]" : ""
-            }`}
+            className={`block text-lg hover:text-[#4A90E2] ${pathname === "/about" ? "text-[#4A90E2]" : ""
+              }`}
           >
             About
           </Link>
@@ -159,15 +171,66 @@ function Navbar() {
               Login
             </Link>
             <Link
-              href="/get-started"
+              href="/signup"
               onClick={() => setIsMenuOpen(false)}
-              className="py-2 px-4 rounded-[32px] bg-[#F97316] text-center text-white hover:bg-[#F97316]/80"
+              className="py-2 px-4 rounded-[32px] bg-[#4A90E2] text-center text-white hover:bg-[#3A78BA]"
             >
               Get started
             </Link>
           </div>
         </nav>
       )}
+
+      {
+        isDropdownOpen && (
+          <div onMouseEnter={handleToolsMouseEnter} onMouseLeave={handleToolsMouseLeave} className="md:grid md:justify-center absolute top-full left-0 w-full z-10">
+            <ul className="list-none border-2 border-[#E6E6E6] md:border-[15px] py-[20px] px-[10px] md:px-[44px] bg-white rounded-[36px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 mt-3 w-full">
+              <li>
+                <ToolLink path="/png-to jpeg">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-28">
+                    PNG TO JPEG
+                  </p>
+                </ToolLink>
+              </li>
+              <li>
+                <ToolLink path="/png-to-pdf">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-28">
+                    PNG TO PDF
+                  </p>
+                </ToolLink>
+              </li>
+              <li>
+                <ToolLink path="/jpeg-to-svg">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
+                    JPEG TO SVG
+                  </p>
+                </ToolLink>
+              </li>
+              <li>
+                <ToolLink path="/pdf-to-jpeg">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
+                    PDF TO JPEG
+                  </p>
+                </ToolLink>
+              </li>
+              <li>
+                <ToolLink path="/mp4-to-mp3">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
+                    MP4 TO MP3
+                  </p>
+                </ToolLink>
+              </li>
+              <li>
+                <ToolLink path="/pdf-to-docx">
+                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
+                    PDF TO DOCX
+                  </p>
+                </ToolLink>
+              </li>
+            </ul>
+          </div>
+        )
+      }
     </div>
   );
 }

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+  <!-- File outline -->
+  <rect width="48" height="60" x="8" y="2" rx="4" ry="4" stroke="#4A90E2" stroke-width="3" fill="white"></rect>
+  
+  <!-- File title line -->
+  <path d="M24 20h16" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"></path>
+  
+  <!-- Conversion arrows loop -->
+  <path d="M20 36c0-4 3.5-7 8-7h8m8 7c0 4-3.5 7-8 7h-8" stroke="#4A90E2" stroke-width="3" stroke-linecap="round"></path>
+  
+  <!-- Up arrow -->
+  <path d="M28 29l4-4 4 4" stroke="#4A90E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+  
+  <!-- Down arrow -->
+  <path d="M36 43l-4 4-4-4" stroke="#4A90E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

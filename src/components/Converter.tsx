@@ -164,11 +164,15 @@ function Converter() {
     "svg-to-png": "/api/v1/convert/svg-to-png",
     "svg-to-jpg": "/api/v1/convert/svg-to-jpg",
     "mp4-to-mp3": "/api/v1/convert/mp4-to-mp3",
+    "png-to-jpeg": "/api/v1/convert/png-to-jpeg",
+    "jpeg-to-png": "/api/v1/convert/jpeg-to-png",
     "compress": "/api/v1/compress",
   };
 
   const validFormats: Record<string, string[]> = {
     "png-to-pdf": ["image/png"],
+    "png-to-jpeg": ["image/png"],
+    "jpeg-to-png": ["image/jpeg"],
     "jpg-to-pdf": ["image/jpeg"],
     "svg-to-pdf": ["image/svg+xml"],
     "docx-to-pdf": [
@@ -239,8 +243,8 @@ function Converter() {
     const formData = new FormData();
     formData.append("file", file);
     if (outputFormat === "compress") {
-    formData.append("percent", String(percentage));
-  }
+      formData.append("percent", String(percentage));
+    }
 
 
     try {
@@ -329,7 +333,7 @@ function Converter() {
         <>
           {convertedFile && (
             <>
-              <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#F97316]/5 hover:border-[#F97316] transition ease-in-out delay-150">
+              <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                 <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
                   <span>
                     <svg
@@ -414,7 +418,7 @@ function Converter() {
                 <button
                   onClick={handleDownload}
                   disabled={isDownloading}
-                  className={`px-5 py-2 rounded-[8px] bg-[#F97316] text-white hover:bg-[#F97316]/80 focus:outline-none flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50 transition`}
+                  className={`px-5 py-2 rounded-[8px] bg-[#4A90E2] text-white hover:bg-[#3A78BA] focus:outline-none flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50 transition`}
                 >
                   {isDownloading ? (
                     <div className="flex justify-center items-center gap-2">
@@ -443,7 +447,7 @@ function Converter() {
             <>
               {file && (
                 <>
-                  <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#F97316]/5 hover:border-[#F97316] transition ease-in-out delay-150">
+                  <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                     <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
                       <span>
                         {previewImgUrl ? (
@@ -547,13 +551,15 @@ function Converter() {
                       </label>
                       <select
                         id="convertFormat"
-                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316] transition"
+                        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 focus:border-[#4A90E2] focus:ring-2 focus:ring-[#4A90E2] transition"
                         value={outputFormat}
                         onChange={handleConversionOptionChange}
                       >
                         <option value="" disabled>
                           Select option
                         </option>
+                        <option value="png-to-jpeg">PNG To JPEG</option>
+                        <option value="jpeg-to-png">JPEG To PNG</option>
                         <option value="png-to-pdf">PNG To PDF</option>
                         <option value="jpg-to-pdf">JPG TO PDF</option>
                         <option value="svg-to-pdf">SVG TO PDF</option>
@@ -573,20 +579,20 @@ function Converter() {
                         <div className="flex gap-2 w-full">
                           <label className="text-black whitespace-nowrap">Enter Compression Percentage</label>
                           <input value={percentage} min={0} max={100} step={1} onChange={(e) => {
-    const val = Number(e.target.value);
-    if (val >= 0 && val <= 100) {
-      setPercentage(val);
-    } else if (e.target.value === "") {
-      setPercentage("");
-    }
-  }} type="number" placeholder="Enter percentage (e.g 50)" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316] transition" />
+                            const val = Number(e.target.value);
+                            if (val >= 0 && val <= 100) {
+                              setPercentage(val);
+                            } else if (e.target.value === "") {
+                              setPercentage("");
+                            }
+                          }} type="number" placeholder="Enter percentage (e.g 50)" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 focus:border-[#4A90E2] focus:ring-2 focus:ring-[#4A90E2] transition" />
                         </div>
                       )
                     }
                     <button
                       onClick={handleConvert}
                       disabled={!outputFormat || isConverting}
-                      className={`w-full py-2 rounded-[8px] bg-[#F97316] text-white hover:bg-[#F97316]/80 focus:outline-none flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50 transition`}
+                      className={`w-full py-2 rounded-[8px] bg-[#4A90E2] text-white hover:bg-[#3A78BA] focus:outline-none flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50 transition`}
                     >
                       {isConverting ? (
                         <div className="flex justify-center items-center gap-2">
@@ -611,7 +617,7 @@ function Converter() {
             </>
           ) : (
             <>
-              <div className="relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px] mb-4 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-col items-center justify-center hover:bg-[#F97316]/5 hover:border-[#F97316] transition ease-in-out delay-150">
+              <div className="relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px] mb-4 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-col items-center justify-center hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                 <div onDragOver={handleDragOver} onDrop={handleDrop}>
                   <input
                     type="file"
@@ -668,7 +674,7 @@ function Converter() {
                       </g>
                     </svg>
                     <p className=" text-[16px] md:text-[20px] text-[#475467] pt-3">
-                      <span className="text-[#F97316]">Upload</span> or drag and
+                      <span className="text-[#4A90E2]">Upload</span> or drag and
                       drop file (pdf, doc, docx, image/*, audio/*, video/*,
                       svg).
                     </p>
