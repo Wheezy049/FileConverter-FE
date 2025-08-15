@@ -425,7 +425,7 @@ function Converter() {
                       <Image
                         src="/starry.svg"
                         alt="Music icon"
-                        className="animate-spin ml-2 w-4 h-4 md:w-6 md:h-6"
+                        className="animate-spin text-white ml-2 w-4 h-4 md:w-6 md:h-6"
                         width={6}
                         height={6}
                       />
@@ -599,7 +599,7 @@ function Converter() {
                           <Image
                             src="/starry.svg"
                             alt="Music icon"
-                            className="animate-spin ml-2 w-4 h-4 md:w-6 md:h-6"
+                            className="animate-spin text-white ml-2 w-4 h-4 md:w-6 md:h-6"
                             width={6}
                             height={6}
                           />
@@ -607,7 +607,7 @@ function Converter() {
                         </div>
                       ) : (
                         <>
-                          <span>Convert {outputFormat}</span>
+                          <span>Convert</span>
                         </>
                       )}
                     </button>

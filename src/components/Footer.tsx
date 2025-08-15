@@ -22,20 +22,20 @@ function Footer() {
                 <li>
                   <Link
                     className="hover:text-[#4A90E2]"
-                    href="/pdf-to-png"
+                    href="/convert/pdf-to-png"
                   >
                     PDF TO PNG
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/jpeg-to-png">
+                  <Link className="hover:text-[#4A90E2]" href="/convert/jpeg-to-png">
                     JPEG TO PNG
                   </Link>
                 </li>
                 <li>
                   <Link
                     className="hover:text-[#4A90E2]"
-                    href="/file-compression"
+                    href="/convert/file-compression"
                   >
                     FILE COMPRESSION
                   </Link>
@@ -43,14 +43,14 @@ function Footer() {
                 <li>
                   <Link
                     className="hover:text-[#4A90E2]"
-                    href="/mp4-to-mp3"
+                    href="/convert/mp4-to-mp3"
                   >
                     MP4 TO MP3
                   </Link>
                 </li>
 
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/docx-to-pdf">
+                  <Link className="hover:text-[#4A90E2]" href="/convert/docx-to-pdf">
                     DOCX TO PDF
                   </Link>
                 </li>

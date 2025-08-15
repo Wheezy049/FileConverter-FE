@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import ToolLink from "./ToolLink";
+import { products } from "@/data/Product";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,6 +36,13 @@ function Navbar() {
       setIsDropdownOpen(false);
     }, 300);
   };
+
+  const getRandomItems = <T,>(arr: T[], num: number): T[] => {
+    const shuffled = [...arr].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, num);
+  };
+
+  const randomTools = getRandomItems(products, 6);
 
   return (
     <div
@@ -185,48 +193,18 @@ function Navbar() {
         isDropdownOpen && (
           <div onMouseEnter={handleToolsMouseEnter} onMouseLeave={handleToolsMouseLeave} className="md:grid md:justify-center absolute top-full left-0 w-full z-10">
             <ul className="list-none border-2 border-[#E6E6E6] md:border-[15px] py-[20px] px-[10px] md:px-[44px] bg-white rounded-[36px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-8 mt-3 w-full">
-              <li>
-                <ToolLink path="/png-to jpeg">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-28">
-                    PNG TO JPEG
-                  </p>
-                </ToolLink>
-              </li>
-              <li>
-                <ToolLink path="/png-to-pdf">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-28">
-                    PNG TO PDF
-                  </p>
-                </ToolLink>
-              </li>
-              <li>
-                <ToolLink path="/jpeg-to-svg">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
-                    JPEG TO SVG
-                  </p>
-                </ToolLink>
-              </li>
-              <li>
-                <ToolLink path="/pdf-to-jpeg">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
-                    PDF TO JPEG
-                  </p>
-                </ToolLink>
-              </li>
-              <li>
-                <ToolLink path="/mp4-to-mp3">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
-                    MP4 TO MP3
-                  </p>
-                </ToolLink>
-              </li>
-              <li>
-                <ToolLink path="/pdf-to-docx">
-                  <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 md:w-24">
-                    PDF TO DOCX
-                  </p>
-                </ToolLink>
-              </li>
+              {
+                randomTools.map((tool) => (
+                  <li key={tool.header}>
+                    <ToolLink path={tool.url}>
+                      <Image src={tool.imageSrc} alt={tool.header} width={64} height={64} className="w-[64px] h-[64px]" />
+                      <p className="text-[0.75rem] md:text-[0.92rem] text-center text-pretty w-20 uppercase md:w-28">
+                        {tool.header}
+                      </p>
+                    </ToolLink>
+                  </li>
+                ))
+              }
             </ul>
           </div>
         )

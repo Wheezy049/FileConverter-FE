@@ -15,21 +15,21 @@ function HomeLayout() {
     title: "Upload Your File",
     description:
       "Upload your file directly from your device. Supported formats include PDF, images, audio, and more.",
-    src: "/upload-file.png",
+    src: "/step1.png",
   },
   {
     step: 2,
     title: "Convert Your File",
     description:
       "Select the conversion type you need and click 'Convert'. Our tool processes your file quickly and efficiently.",
-    src: "/convert-file.png",
+    src: "/step2.png",
   },
   {
     step: 3,
     title: "Download",
     description:
       "Download your converted file directly. Your files remain secure and easy to access.",
-    src: "/download-file.png",
+    src: "/step3.png",
   },
 ];
 
@@ -38,7 +38,7 @@ function HomeLayout() {
       <Navbar />
       <Hero />
       <Converter />
-      <Explore />
+      <Explore text='Explore Our Products' />
       <HowItWorks data={steps} pageTitle='How IT works' />
       <GetStarted />
       <Footer />
