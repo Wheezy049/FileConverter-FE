@@ -1,0 +1,45 @@
+export const plans = [
+  {
+    id: 1,
+    plan_name: "Free",
+    price: { Month: 0, Annually: 0 },
+    description: "Get started with basic file conversions for free.",
+    plan_interval: "month",
+    features: [
+      "Up to 10 file conversions/month",
+      "Max file size: 5MB",
+      "Access to text to video tool",
+      "Access to image to video tool",
+      "Access to YouTube Summarizer",
+      "Access to Podcast Summarizer",
+      "Access to PDF Summarizer",
+    ],
+  },
+  {
+    id: 2,
+    plan_name: "Pro",
+    price: { Month: 15, Annually: 150 },
+    description: "Perfect for professionals who need regular file conversions.",
+    plan_interval: "month",
+    features: [
+      "Up to 500 file conversions/month",
+      "Max file size: 100MB",
+      "Priority support",
+      "All tools included",
+    ],
+  },
+  {
+    id: 3,
+    plan_name: "Business",
+    price: { Month: 30, Annually: 300 },
+    description: "Best for teams and businesses with high-volume needs.",
+    plan_interval: "month",
+    features: [
+      "Unlimited file conversions",
+      "Max file size: 1GB",
+      "24/7 premium support",
+      "Team collaboration features",
+      "All tools included",
+    ],
+  },
+];
