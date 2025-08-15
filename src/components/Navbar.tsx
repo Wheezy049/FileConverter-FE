@@ -38,7 +38,7 @@ function Navbar() {
 
   return (
     <div
-      className={`fixed top-0 w-full z-50 bg-[#FFF] p-5 md:py-5 lg:px-14 md:px-5 gap-12 ${scrolled ? "bg-[#fff] shadow-md" : ""
+      className={`fixed top-0 w-full z-50 bg-gray-50 p-5 md:py-5 lg:px-14 md:px-5 gap-12 ${scrolled ? "bg-[#fff] shadow-md" : ""
         }`}
     >
       <div className="max-w-[1200px] mx-auto flex justify-between items-center">

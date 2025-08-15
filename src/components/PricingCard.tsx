@@ -40,21 +40,16 @@ function PricingCard({
         ${plan.toLowerCase() !== "free" && "border-[#CBD5E1]"}
       `}
     >
-      {/* Plan Header */}
       <div>
         <h4 className="text-3xl mb-2 font-[550]">{plan}</h4>
         <p className="text-[1rem]">{description}</p>
       </div>
-
-      {/* Price */}
       <div>
         <h3 className="font-bold text-[3rem] mb-1">
           ${billingType === "Annually" ? annualPrice : price}
         </h3>
         <p>{billingText}</p>
       </div>
-
-      {/* Button */}
       {isAuthenticated ? (
         <button
           className="block text-center text-white bg-[#4A90E2] cursor-not-allowed hover:bg-[#023978] font-medium transition-all duration-300 rounded-full w-full py-3 px-5"
@@ -70,8 +65,6 @@ function PricingCard({
           Select Plan
         </Link>
       )}
-
-      {/* Features */}
       <div className="space-y-3">
         <ul className="ml-3 list-none">
           <li>

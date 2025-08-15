@@ -9,27 +9,27 @@ import Explore from './Explore'
 
 function HomeLayout() {
 
-  const data = [
+ const steps = [
   {
     step: 1,
-    title: "Upload the Podcast",
+    title: "Upload Your File",
     description:
-      "Upload the Podcast directly from your local computer or enter the URL of the Apple podcast you want to transcribe/summarize.",
-    src: "/image2.png",
+      "Upload your file directly from your device. Supported formats include PDF, images, audio, and more.",
+    src: "/upload-file.png",
   },
   {
     step: 2,
-    title: "Convert Podcast to Text",
+    title: "Convert Your File",
     description:
-      'Click the "Transcribe" button, and our AI tool will generate the transcript and summary of the the podcast.',
-    src: "/image4.png",
+      "Select the conversion type you need and click 'Convert'. Our tool processes your file quickly and efficiently.",
+    src: "/convert-file.png",
   },
   {
     step: 3,
-    title: "Copy/Download transcript",
+    title: "Download",
     description:
-      "Copy the transcription and summary or download as a PDF or DOC file.",
-    src: "/image.png",
+      "Download your converted file directly. Your files remain secure and easy to access.",
+    src: "/download-file.png",
   },
 ];
 
@@ -39,7 +39,7 @@ function HomeLayout() {
       <Hero />
       <Converter />
       <Explore />
-      <HowItWorks data={data} pageTitle='How IT works' />
+      <HowItWorks data={steps} pageTitle='How IT works' />
       <GetStarted />
       <Footer />
     </div>

@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: ProductShowcase }) {
                         width={64}
                     />
                     <div className="w-full flex-1 items-start mt-4">
-                        <h2 className="text-[22px] font-bold leading-[29.05px] text-[#1F1F1F] ">
+                        <h2 className="text-[22px] font-bold leading-[29.05px] uppercase text-[#1F1F1F] ">
                             {product.header}
                         </h2>
                         <p className="text-[14px] font-medium leading-[16.94px] text-[#4B4B4B] mt-2 h-auto md:h-[50px]">
