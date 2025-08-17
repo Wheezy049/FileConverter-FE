@@ -22,10 +22,10 @@ export const products = [
   },
   {
     imageSrc: "/jpeg.svg",
-    header: "jpg-to-pdf",
+    header: "jpeg-to-pdf",
     description:
       "Easily turn your JPG files into PDFs while preserving clarity and layout.",
-    url: "/convert/jpg-to-pdf",
+    url: "/convert/jpeg-to-pdf",
   },
   {
     imageSrc: "/docx.svg",
@@ -36,10 +36,10 @@ export const products = [
   },
   {
     imageSrc: "/pdf.svg",
-    header: "pdf-to-jpg",
+    header: "pdf-to-jpeg",
     description:
       "Extract high-quality JPG images from your PDF files effortlessly.",
-    url: "/convert/pdf-to-jpg",
+    url: "/convert/pdf-to-jpeg",
   },
   {
     imageSrc: "/pdf.svg",
@@ -57,10 +57,10 @@ export const products = [
   },
   {
     imageSrc: "/svg.svg",
-    header: "svg-to-jpg",
+    header: "svg-to-jpeg",
     description:
       "Easily convert SVG files into JPG format while keeping quality intact.",
-    url: "/convert/svg-to-jpg",
+    url: "/convert/svg-to-jpeg",
   },
   {
     imageSrc: "/svg.svg",
@@ -70,11 +70,11 @@ export const products = [
     url: "/convert/svg-to-pdf",
   },
   {
-    imageSrc: "/pdf.svg",
-    header: "pdf-to-image",
+    imageSrc: "/png.svg",
+    header: "png-to-svg",
     description:
-      "Convert PDF pages into image formats like JPG or PNG quickly.",
-    url: "/convert/pdf-to-image",
+      "Convert PNG images into SVG quickly.",
+    url: "/convert/png-to-svg",
   },
   {
     imageSrc: "/pdf.svg",
@@ -84,11 +84,11 @@ export const products = [
     url: "/convert/pdf-to-docx",
   },
   {
-    imageSrc: "/svg.svg",
-    header: "svg-to-image",
+    imageSrc: "/jpeg.svg",
+    header: "jpeg-to-svg",
     description:
-      "Convert SVG files to any image format supported by our converter.",
-    url: "/convert/svg-to-image",
+      "Convert PNG images into SVG quickly.",
+    url: "/convert/jpeg-to-svg",
   },
   {
     imageSrc: "/mp4.svg",
