@@ -60,13 +60,13 @@ function Footer() {
               <h3 className="text-xl font-semibold text-[#E6F0FA]">Support</h3>
               <ul className="transition ease-in-out delay-150 flex flex-col items-start text-base gap-4 cursor-pointer duration-300">
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/resources">
+                  <Link className="hover:text-[#4A90E2]" href="/#">
                     Resources
                   </Link>
                 </li>
 
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/contact">
+                  <Link className="hover:text-[#4A90E2]" href="/#">
                     Contact Us
                   </Link>
                 </li>
@@ -86,12 +86,12 @@ function Footer() {
               <h3 className="text-xl font-semibold text-[#E6F0FA]">Legal</h3>
               <ul className="transition ease-in-out delay-150 flex flex-col items-start text-base gap-4 cursor-pointer duration-300">
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/privacy-policy">
+                  <Link className="hover:text-[#4A90E2]" href="/#">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-[#4A90E2]" href="/terms">
+                  <Link className="hover:text-[#4A90E2]" href="/#">
                     Terms and Condition
                   </Link>
                 </li>

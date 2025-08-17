@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import JpegToPng from '@/components/JpegToPng'
 
 export const metadata: Metadata = {
   title: "Convert JPEG to PNG Online – Free & Secure",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 function page() {
   return (
     <div className='pt-[100px]'>
-       JPEG TO PNG
+       <JpegToPng />
     </div>
   )
 }
