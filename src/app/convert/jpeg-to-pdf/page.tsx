@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import JpegToPdf from '@/components/JpegToPdf'
 
 export const metadata: Metadata = {
   title: "JPEG to PDF Online – Free & Easy",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 function page() {
   return (
-    <div>page</div>
+    <div className='pt-[100px]'>
+        <JpegToPdf />
+    </div>
   )
 }
 
