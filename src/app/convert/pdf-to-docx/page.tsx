@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import PdfToDocx from '@/components/PdfToDocx'
 
 export const metadata: Metadata = {
   title: "PDF to DOCX Online – Free Tool",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 function page() {
   return (
-    <div>page</div>
+    <div className='pt-[100px]'>
+      <PdfToDocx />
+    </div>
   )
 }
 

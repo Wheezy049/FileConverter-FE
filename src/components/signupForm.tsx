@@ -47,9 +47,8 @@ function SignupForm() {
               <input
                 type="text"
                 id="email"
-                className={`w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4A90E2] text-[1.125rem] leading-[1.75rem] ${
-                  errMsg && "focus:ring-red-600"
-                } focus:border-transparent`}
+                className={`w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4A90E2] text-[1.125rem] leading-[1.75rem] ${errMsg && "focus:ring-red-600"
+                  } focus:border-transparent`}
                 placeholder="Enter your email address"
               />
             </div>
@@ -64,9 +63,8 @@ function SignupForm() {
                 <input
                   type={passwordVisible ? "text" : "password"}
                   id="password"
-                  className={`w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4A90E2] text-[1.125rem] leading-[1.75rem] ${
-                    errMsg && "focus:ring-red-600"
-                  } focus:border-transparent`}
+                  className={`w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#4A90E2] text-[1.125rem] leading-[1.75rem] ${errMsg && "focus:ring-red-600"
+                    } focus:border-transparent`}
                   placeholder="Enter your password"
                 />
                 <div
@@ -82,8 +80,8 @@ function SignupForm() {
               </div>
             </div>
             {errMsg && <p className="text-red-500 h-1 w-fit text-sm mt-1 font-semibold">
-                {errMsg}
-              </p>}
+              {errMsg}
+            </p>}
             <div className="mt-3 w-full">
               <div className="flex w-full justify-between mt-3 mb-6">
                 <span className="cursor-pointer font-medium opacity-80 hover:opacity-100 transition-opacity duration-150 ease-in-out">

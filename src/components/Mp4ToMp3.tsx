@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { apiFetch } from '@/lib/apiFetch';
 
-function PngToPdf() {
+function Mp4ToMp3() {
 
     const [file, setFile] = useState<File | null>(null);
     const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -16,25 +16,22 @@ function PngToPdf() {
     const [converted, setConverted] = useState<boolean>(false);
     const [isDownloading, setIsDownloading] = useState<boolean>(false);
     const [filename, setFilename] = useState<string>("");
-    const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const acceptedFormats = ["image/png"];
+        const acceptedFormats = ["video/*"];
 
         const selectedFile = e.target.files?.[0];
 
         if (selectedFile && acceptedFormats.includes(selectedFile.type)) {
             setFile(selectedFile);
-            setPreviewImgUrl(URL.createObjectURL(selectedFile));
             setIsComplete(true);
             setErrMsg("");
         } else {
             setFile(null);
-            setPreviewImgUrl("");
             setIsComplete(false);
-            setErrMsg("Please upload a valid PNG file.");
+            setErrMsg("Please upload a valid MP4 file.");
         }
     };
 
@@ -56,20 +53,18 @@ function PngToPdf() {
 
         const droppedFile = e.dataTransfer.files[0];
         const acceptedFormats = [
-            "image/png",
+            "video/*",
         ];
 
         if (
             droppedFile && acceptedFormats.includes(droppedFile.type)
         ) {
             setFile(droppedFile);
-            setPreviewImgUrl(URL.createObjectURL(droppedFile))
             setIsComplete(true);
             setErrMsg("");
         } else {
             setFile(null);
-            setErrMsg("Please upload a valid PNG file.");
-            setPreviewImgUrl("")
+            setErrMsg("Please upload a valid MP4 file.");
         }
     };
 
@@ -111,7 +106,7 @@ function PngToPdf() {
         formData.append("file", file);
 
         try {
-            const response = await apiFetch("/api/v1/convert/png-to-pdf", {
+            const response = await apiFetch("/api/v1/convert/mp4-to-mp3", {
                 method: "POST",
                 body: formData,
             });
@@ -196,10 +191,10 @@ function PngToPdf() {
                 <div className="relative gap-[24px] w-full max-w-[700px] md:mb-12 flex flex-col items-center justify-center">
                     <div className="gap-[16px] flex flex-col items-center pt-[40px] relative">
                         <h1 className="text-[32px] md:text-[48px] lg:text-[48px] text-[#1A1A1A] font-bold leading-[40px] md:leading-[72px] text-center animate-slide-up opacity-0 animate-delay-[100ms]">
-                            PNG TO PDF
+                            MP4 TO MP3
                         </h1>
                         <p className="text-[14px] md:text-[17px] font-medium leading-[24px] md:leading-[27.32px] text-center text-[#555555] animate-slide-up opacity-0 animate-delay-[200ms]">
-                            Convert PNG images into PDF documents for easy sharing and printing.
+                            Extract audio from your MP4 videos and save it as an MP3 file instantly.
                         </p>
                     </div>
                 </div>
@@ -317,20 +312,11 @@ function PngToPdf() {
                                     <>
                                         <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                                             <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
-                                                <span>
-                                                    <Image
-                                                        src={previewImgUrl || ""}
-                                                        alt="Preview"
-                                                        height={200}
-                                                        width={150}
-                                                        style={{
-                                                            width: "150px",
-                                                            height: "200px",
-                                                            borderRadius: "8px",
-                                                            marginTop: "1rem",
-                                                            objectFit: "contain"
-                                                        }}
-                                                    />
+                                                <span className="text-[#475467]">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M6 2H14L20 8V22C20 22.5304 19.7893 23.0391 19.4142 23.4142C19.0391 23.7893 18.5304 24 18 24H6C5.46957 24 4.96086 23.7893 4.58579 23.4142C4.21071 23.0391 4 22.5304 4 22V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2Z" />
+                                                        <path d="M14 2V8H20" />
+                                                    </svg>
                                                 </span>
                                                 <div>
                                                     <p className="text-base md:text-xl text-left font-bold text-[#292D32] mb-2">
@@ -428,7 +414,7 @@ function PngToPdf() {
                                     <div onDragOver={handleDragOver} onDrop={handleDrop}>
                                         <input
                                             type="file"
-                                            accept="image/png,"
+                                            accept="video/*"
                                             onChange={handleFileChange}
                                             className="hidden"
                                             id="fileUpload"
@@ -481,10 +467,10 @@ function PngToPdf() {
                                                 </g>
                                             </svg>
                                             <p className="text-[16px] md:text-[20px] text-[#475467] pt-3">
-                                                <span className="text-[#4A90E2] font-medium">Upload</span> or drag & drop your PNG file here.
+                                                <span className="text-[#4A90E2] font-medium">Upload</span> or drag & drop your MP4 file here.
                                             </p>
                                             <span className="block text-[#71717A] text-sm md:text-base">
-                                                Maximum file size: 100MB (PNG only)
+                                                Maximum file size: 100MB (MP4 only)
                                             </span>
                                             {errMsg && <p className="text-red-500 mt-2">{errMsg}</p>}
                                         </label>
@@ -499,4 +485,4 @@ function PngToPdf() {
     )
 }
 
-export default PngToPdf
+export default Mp4ToMp3

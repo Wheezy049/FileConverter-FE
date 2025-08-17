@@ -1,11 +1,10 @@
-"use client"
-import React, { useState, useRef, useEffect } from 'react'
-import Image from 'next/image';
-import { toast } from 'react-toastify';
-import { apiFetch } from '@/lib/apiFetch';
+"use client";
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import { toast } from "react-toastify";
+import { apiFetch } from "@/lib/apiFetch";
 
-function PngToPdf() {
-
+function FileCompression() {
     const [file, setFile] = useState<File | null>(null);
     const [isComplete, setIsComplete] = useState<boolean>(false);
     const [showHover, setShowHover] = useState<boolean>(false);
@@ -17,24 +16,52 @@ function PngToPdf() {
     const [isDownloading, setIsDownloading] = useState<boolean>(false);
     const [filename, setFilename] = useState<string>("");
     const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
+    const [percentage, setPercentage] = useState<number | "">("")
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const acceptedFormats = ["image/png"];
+        const acceptedFormats = [
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "image/*",
+            "audio/*",
+            "video/*",
+            "image/svg+xml",
+        ];
 
         const selectedFile = e.target.files?.[0];
 
-        if (selectedFile && acceptedFormats.includes(selectedFile.type)) {
+        if (
+            selectedFile &&
+            acceptedFormats.some((format) =>
+                format.endsWith("/*")
+                    ? selectedFile.type.startsWith(format.split("/")[0] + "/")
+                    : selectedFile.type === format
+            )
+        ) {
             setFile(selectedFile);
-            setPreviewImgUrl(URL.createObjectURL(selectedFile));
+
+            if (
+                [
+                    "image/png",
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/gif",
+                    "image/webp",
+                ].includes(selectedFile.type)
+            ) {
+                setPreviewImgUrl(URL.createObjectURL(selectedFile));
+            } else {
+                setPreviewImgUrl("");
+            }
+
             setIsComplete(true);
             setErrMsg("");
         } else {
             setFile(null);
             setPreviewImgUrl("");
-            setIsComplete(false);
-            setErrMsg("Please upload a valid PNG file.");
+            setErrMsg("Please upload a valid file format (pdf, doc, docx, image/*, audio/*, video/*, svg).");
         }
     };
 
@@ -56,20 +83,30 @@ function PngToPdf() {
 
         const droppedFile = e.dataTransfer.files[0];
         const acceptedFormats = [
-            "image/png",
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "image/*",
+            "audio/*",
+            "video/*",
+            "image/svg+xml",
         ];
 
         if (
-            droppedFile && acceptedFormats.includes(droppedFile.type)
+            droppedFile &&
+            acceptedFormats.some((format) =>
+                format.endsWith("/*")
+                    ? droppedFile.type.startsWith(format.split("/")[0] + "/")
+                    : droppedFile.type === format
+            )
         ) {
             setFile(droppedFile);
-            setPreviewImgUrl(URL.createObjectURL(droppedFile))
             setIsComplete(true);
             setErrMsg("");
         } else {
             setFile(null);
-            setErrMsg("Please upload a valid PNG file.");
-            setPreviewImgUrl("")
+            setErrMsg(
+                "Please upload a valid file format (pdf, doc, docx, image/*, audio/*, video/*, svg)."
+            );
         }
     };
 
@@ -97,7 +134,6 @@ function PngToPdf() {
         setFilename("");
     };
 
-
     const handleConvert = async () => {
         setIsConverting(true);
 
@@ -107,11 +143,19 @@ function PngToPdf() {
             return;
         }
 
+        if (percentage === "" || percentage === 0 || percentage === null || isNaN(Number(percentage))) {
+            toast.error("Please enter a valid percentage.");
+            setIsConverting(false);
+            return;
+        }
+
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("percent", String(percentage));
+
 
         try {
-            const response = await apiFetch("/api/v1/convert/png-to-pdf", {
+            const response = await apiFetch("/api/v1/compress", {
                 method: "POST",
                 body: formData,
             });
@@ -141,7 +185,7 @@ function PngToPdf() {
             setConvertedFile(convertedFileObj);
             setIsConverting(false);
             setConverted(true);
-            toast.success(data.message || "File has been converted successfully");
+            toast.success(data.message || "File has been compressed successfully");
         } catch (error: unknown) {
             console.error("Error while converting", error);
 
@@ -196,10 +240,10 @@ function PngToPdf() {
                 <div className="relative gap-[24px] w-full max-w-[700px] md:mb-12 flex flex-col items-center justify-center">
                     <div className="gap-[16px] flex flex-col items-center pt-[40px] relative">
                         <h1 className="text-[32px] md:text-[48px] lg:text-[48px] text-[#1A1A1A] font-bold leading-[40px] md:leading-[72px] text-center animate-slide-up opacity-0 animate-delay-[100ms]">
-                            PNG TO PDF
+                            File Compression
                         </h1>
                         <p className="text-[14px] md:text-[17px] font-medium leading-[24px] md:leading-[27.32px] text-center text-[#555555] animate-slide-up opacity-0 animate-delay-[200ms]">
-                            Convert PNG images into PDF documents for easy sharing and printing.
+                            Compress any supported file format to reduce size without losing quality.
                         </p>
                     </div>
                 </div>
@@ -210,7 +254,7 @@ function PngToPdf() {
                         {convertedFile && (
                             <>
                                 <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
-                                    <div className="flex gap-2 md:gap-4 sm:justify-center md:justify-normal items-center">
+                                    <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
                                         <span className="text-[#475467]">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
                                                 <path d="M6 2H14L20 8V22C20 22.5304 19.7893 23.0391 19.4142 23.4142C19.0391 23.7893 18.5304 24 18 24H6C5.46957 24 4.96086 23.7893 4.58579 23.4142C4.21071 23.0391 4 22.5304 4 22V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2Z" />
@@ -318,19 +362,28 @@ function PngToPdf() {
                                         <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                                             <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
                                                 <span>
-                                                    <Image
-                                                        src={previewImgUrl || ""}
-                                                        alt="Preview"
-                                                        height={200}
-                                                        width={150}
-                                                        style={{
-                                                            width: "150px",
-                                                            height: "200px",
-                                                            borderRadius: "8px",
-                                                            marginTop: "1rem",
-                                                            objectFit: "contain"
-                                                        }}
-                                                    />
+                                                    {previewImgUrl ? (
+                                                        <Image
+                                                            src={previewImgUrl}
+                                                            alt="Preview"
+                                                            height={200}
+                                                            width={150}
+                                                            style={{
+                                                                width: "150px",
+                                                                height: "200px",
+                                                                borderRadius: "8px",
+                                                                marginTop: "1rem",
+                                                                objectFit: 'contain'
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <span className="text-[#475467]">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+                                                                <path d="M6 2H14L20 8V22C20 22.5304 19.7893 23.0391 19.4142 23.4142C19.0391 23.7893 18.5304 24 18 24H6C5.46957 24 4.96086 23.7893 4.58579 23.4142C4.21071 23.0391 4 22.5304 4 22V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2Z" />
+                                                                <path d="M14 2V8H20" />
+                                                            </svg>
+                                                        </span>
+                                                    )}
                                                 </span>
                                                 <div>
                                                     <p className="text-base md:text-xl text-left font-bold text-[#292D32] mb-2">
@@ -396,9 +449,20 @@ function PngToPdf() {
                                         <div
                                             className={`w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] py-2 rounded-[8px] flex items-center justify-between gap-2`}
                                         >
+                                            <div className="flex gap-2 w-full">
+                                                <label className="text-black whitespace-nowrap">Enter Compression Percentage:</label>
+                                                <input value={percentage} min={0} max={100} step={1} onChange={(e) => {
+                                                    const val = Number(e.target.value);
+                                                    if (val >= 0 && val <= 100) {
+                                                        setPercentage(val);
+                                                    } else if (e.target.value === "") {
+                                                        setPercentage("");
+                                                    }
+                                                }} type="number" placeholder="Enter percentage (e.g 50)" className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 focus:border-[#4A90E2] focus:ring-2 focus:ring-[#4A90E2] transition" />
+                                            </div>
                                             <button
                                                 onClick={handleConvert}
-                                                disabled={isConverting}
+                                                disabled={ !percentage || isConverting}
                                                 className={`w-full py-2 rounded-[8px] bg-[#4A90E2] text-white hover:bg-[#3A78BA] focus:outline-none flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-50 transition`}
                                             >
                                                 {isConverting ? (
@@ -428,7 +492,7 @@ function PngToPdf() {
                                     <div onDragOver={handleDragOver} onDrop={handleDrop}>
                                         <input
                                             type="file"
-                                            accept="image/png,"
+                                            accept=".pdf,.doc,.docx,image/*,audio/*,video/*,.svg"
                                             onChange={handleFileChange}
                                             className="hidden"
                                             id="fileUpload"
@@ -480,11 +544,13 @@ function PngToPdf() {
                                                     <path d="M120 0H0V120H120V0Z" fill="#D0D5DD" />
                                                 </g>
                                             </svg>
-                                            <p className="text-[16px] md:text-[20px] text-[#475467] pt-3">
-                                                <span className="text-[#4A90E2] font-medium">Upload</span> or drag & drop your PNG file here.
+                                            <p className=" text-[16px] md:text-[20px] text-[#475467] pt-3">
+                                                <span className="text-[#4A90E2]">Upload</span> or drag and
+                                                drop the supported file format.
                                             </p>
                                             <span className="block text-[#71717A] text-sm md:text-base">
-                                                Maximum file size: 100MB (PNG only)
+                                                MAX 100mb (pdf, doc, docx, image/*, audio/*, video/*,
+                                                svg).
                                             </span>
                                             {errMsg && <p className="text-red-500 mt-2">{errMsg}</p>}
                                         </label>
@@ -496,7 +562,7 @@ function PngToPdf() {
                 )}
             </div>
         </div>
-    )
+    );
 }
 
-export default PngToPdf
+export default FileCompression;

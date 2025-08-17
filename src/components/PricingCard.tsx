@@ -2,18 +2,18 @@ import React from 'react'
 import Link from 'next/link';
 
 type PricingCardProps = {
-    id: number;
-    plan: string;
-    price: number;
-    description: string;
-    billingCircle: string;
-    features: string[];
-    billingType: "Month" | "Annually";
-    isAuthenticated: boolean;
+  id: number;
+  plan: string;
+  price: number;
+  description: string;
+  billingCircle: string;
+  features: string[];
+  billingType: "Month" | "Annually";
+  isAuthenticated: boolean;
 };
 
 function PricingCard({
-   id,
+  id,
   plan,
   description,
   price,
@@ -28,11 +28,11 @@ function PricingCard({
     plan.toLowerCase() === "free"
       ? "Enduring free access"
       : billingType === "Annually"
-      ? "Billed Annually"
-      : "Per Month";
+        ? "Billed Annually"
+        : "Per Month";
 
-    return (
-       <div
+  return (
+    <div
       className={`
         space-y-6 p-4 md:p-8 border-2 w-full rounded-2xl h-full min-h-[642px] transition-transform duration-300
         ${plan.toLowerCase() === "free" && id === 1 ? "bg-transparent" : "bg-white"}
@@ -78,7 +78,7 @@ function PricingCard({
         </ul>
       </div>
     </div>
-    )
+  )
 }
 
 export default PricingCard

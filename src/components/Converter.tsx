@@ -17,10 +17,47 @@ function Converter() {
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [filename, setFilename] = useState<string>("");
   const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
-  const [percentage, setPercentage] = useState<number | "">("")
-  const [isPercentageVisible, setIsPercentageVisible] = useState<boolean>(false)
+  const [percentage, setPercentage] = useState<number | "">("");
+  const [isPercentageVisible, setIsPercentageVisible] = useState<boolean>(false);
+  const [fileType, setFileType] = useState<string>("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const tools = [
+    { id: "compress", input: "all", output: "zip", name: "File Compression" },
+    { id: "png-to-jpeg", input: "png", output: "jpeg", name: "PNG to JPEG" },
+    { id: "png-to-pdf", input: "png", output: "pdf", name: "PNG to PDF" },
+    { id: "png-to-svg", input: "png", output: "svg", name: "PNG to SVG" },
+    { id: "jpeg-to-png", input: "jpeg", output: "png", name: "JPEG to PNG" },
+    { id: "jpeg-to-svg", input: "jpeg", output: "svg", name: "JPEG to SVG" },
+    { id: "jpg-to-pdf", input: "jpeg", output: "pdf", name: "JPEG to PDF" },
+    { id: "docx-to-pdf", input: "docx", output: "pdf", name: "DOCX to PDF" },
+    { id: "pdf-to-jpg", input: "pdf", output: "jpg", name: "PDF to JPG" },
+    { id: "pdf-to-png", input: "pdf", output: "png", name: "PDF to PNG" },
+    { id: "pdf-to-docx", input: "pdf", output: "docx", name: "PDF to DOCX" },
+    { id: "svg-to-png", input: "svg", output: "png", name: "SVG to PNG" },
+    { id: "svg-to-jpg", input: "svg", output: "jpg", name: "SVG to JPG" },
+    { id: "svg-to-pdf", input: "svg", output: "pdf", name: "SVG to PDF" },
+    { id: "mp4-to-mp3", input: "mp4", output: "mp3", name: "MP4 to MP3" },
+  ];
+
+  const normalizeFileType = (file: File) => {
+    const { type } = file;
+
+    if (type.startsWith("image/")) {
+      if (type === "image/png") return "png";
+      if (type === "image/jpeg") return "jpeg";
+      if (type === "image/svg+xml") return "svg";
+    }
+
+    if (type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") return "docx";
+    if (type === "application/pdf") return "pdf";
+    if (type.startsWith("video/")) return "mp4";
+    if (type.startsWith("audio/")) return "mp3";
+
+    return "all";
+  };
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const acceptedFormats = [
@@ -43,7 +80,7 @@ function Converter() {
       )
     ) {
       setFile(selectedFile);
-
+      setFileType(normalizeFileType(selectedFile));
       if (
         [
           "image/png",
@@ -63,9 +100,13 @@ function Converter() {
     } else {
       setFile(null);
       setPreviewImgUrl("");
-      setErrMsg("Please upload a valid file format.");
+      setErrMsg("Please upload a valid file format (pdf, doc, docx, image/*, audio/*, video/*, svg).");
     }
   };
+
+  const availableTools = tools.filter(
+    (tool) => tool.input === fileType || tool.input === "all"
+  );
 
   useEffect(() => {
     if (errMsg) {
@@ -107,7 +148,7 @@ function Converter() {
     } else {
       setFile(null);
       setErrMsg(
-        "Please upload a valid file forma (pdf, doc, docx, image/*, audio/*, video/*, svg)."
+        "Please upload a valid file format (pdf, doc, docx, image/*, audio/*, video/*, svg)."
       );
     }
   };
@@ -335,18 +376,10 @@ function Converter() {
             <>
               <div className="space-y-2 relative bg-white border-dashed w-[90%] sm:w-[80%] md:w-[80%] lg:w-[85%] xl:w-[90%] max-w-6xl h-[260px] sm:h-[280px] md:h-[300px]  my-5 mx-auto border-[1px] border-[#7E97B4] rounded-lg flex flex-row items-center justify-between p-5 md:p-10 hover:bg-[#E6F0FA]/10 hover:border-[#3A78BA] transition ease-in-out delay-150">
                 <div className="flex gap-4 md:gap-8 sm:justify-center md:justify-normal items-center">
-                  <span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="62"
-                      height="62"
-                      viewBox="0 0 62 62"
-                      fill="none"
-                    >
-                      <path
-                        d="M23.2501 33.5832V12.9165C23.2501 10.0748 25.5751 7.74984 28.4167 7.74984H51.6667C54.5084 7.74984 56.8334 10.0748 56.8334 12.9165V28.4165H47.9726L44.6659 23.9215C44.6338 23.868 44.5883 23.8237 44.534 23.793C44.4797 23.7623 44.4183 23.7461 44.3559 23.7461C44.2935 23.7461 44.2321 23.7623 44.1778 23.793C44.1235 23.8237 44.0781 23.868 44.0459 23.9215L38.9051 30.9998C38.7501 31.1548 38.4401 31.1807 38.2851 30.9998L34.5909 26.479C34.5541 26.4364 34.5084 26.4021 34.4572 26.3787C34.4059 26.3552 34.3502 26.3431 34.2938 26.3431C34.2375 26.3431 34.1817 26.3552 34.1305 26.3787C34.0792 26.4021 34.0336 26.4364 33.9967 26.479L28.5459 33.3507C28.3392 33.5832 28.5201 33.9707 28.8301 33.9707H45.2084V38.7498H28.4167C25.5492 38.7498 23.2501 36.4507 23.2501 33.5832ZM15.5001 56.8332V54.2498H10.3334V56.8332H5.16675V5.1665H10.3334V7.74984H15.5001V5.1665H21.6742C19.4784 7.07817 18.0834 9.8165 18.0834 12.9165V33.5832C18.0834 39.2923 22.7076 43.9165 28.4167 43.9165H40.5584C37.8976 46.0607 36.1667 49.2898 36.1667 52.9582C36.1667 54.3273 36.4509 55.619 36.8901 56.8332H15.5001ZM10.3334 18.0832H15.5001V12.9165H10.3334V18.0832ZM10.3334 28.4165H15.5001V23.2498H10.3334V28.4165ZM10.3334 38.7498H15.5001V33.5832H10.3334V38.7498ZM15.5001 49.0832V43.9165H10.3334V49.0832H15.5001ZM59.4167 33.5832V38.7498H54.2501V52.9582C54.2501 54.671 53.5697 56.3137 52.3585 57.5249C51.1473 58.7361 49.5046 59.4165 47.7917 59.4165C46.0789 59.4165 44.4362 58.7361 43.225 57.5249C42.0138 56.3137 41.3334 54.671 41.3334 52.9582C41.334 51.8861 41.6014 50.831 42.1116 49.8881C42.6218 48.9452 43.3586 48.1441 44.2558 47.5572C45.1529 46.9702 46.182 46.6158 47.2503 46.5259C48.3186 46.436 49.3925 46.6135 50.3751 47.0423V33.5832H59.4167Z"
-                        fill="#475467"
-                      />
+                  <span className="text-[#475467]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6 2H14L20 8V22C20 22.5304 19.7893 23.0391 19.4142 23.4142C19.0391 23.7893 18.5304 24 18 24H6C5.46957 24 4.96086 23.7893 4.58579 23.4142C4.21071 23.0391 4 22.5304 4 22V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2Z" />
+                      <path d="M14 2V8H20" />
                     </svg>
                   </span>
                   <div>
@@ -553,26 +586,17 @@ function Converter() {
                         <option value="" disabled>
                           Select option
                         </option>
-                        <option value="png-to-jpeg">PNG To JPEG</option>
-                        <option value="jpeg-to-png">JPEG To PNG</option>
-                        <option value="png-to-pdf">PNG To PDF</option>
-                        <option value="jpg-to-pdf">JPG TO PDF</option>
-                        <option value="svg-to-pdf">SVG TO PDF</option>
-                        <option value="docx-to-pdf">DOCX TO PDF</option>
-                        <option value="pdf-to-png">PDF TO PNG</option>
-                        <option value="pdf-to-jpg">PDF TO JPG</option>
-                        <option value="pdf-to-docx">PDF TO DOCX</option>
-                        <option value="png-to-svg">PNG TO SVG</option>
-                        <option value="jpg-to-svg">JPG TO SVG</option>
-                        <option value="svg-to-png">SVG TO PNG</option>
-                        <option value="svg-to-jpg">SVG TO JPG</option>
-                        <option value="compress">COMPRESSION OF FILE</option>
+                        {availableTools.map((tool) => (
+                          <option key={tool.id} value={tool.id}>
+                            {tool.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     {
                       isPercentageVisible && (
                         <div className="flex gap-2 w-full">
-                          <label className="text-black whitespace-nowrap">Enter Compression Percentage</label>
+                          <label className="text-black whitespace-nowrap">Enter Compression Percentage:</label>
                           <input value={percentage} min={0} max={100} step={1} onChange={(e) => {
                             const val = Number(e.target.value);
                             if (val >= 0 && val <= 100) {
@@ -670,11 +694,11 @@ function Converter() {
                     </svg>
                     <p className=" text-[16px] md:text-[20px] text-[#475467] pt-3">
                       <span className="text-[#4A90E2]">Upload</span> or drag and
-                      drop file (pdf, doc, docx, image/*, audio/*, video/*,
-                      svg).
+                      drop the supported file format.
                     </p>
                     <span className="block text-[#71717A] text-sm md:text-base">
-                      MAX 25mb (MP4, MP3)
+                      MAX 100mb (pdf, doc, docx, image/*, audio/*, video/*,
+                      svg).
                     </span>
                     {errMsg && <p className="text-red-500 mt-2">{errMsg}</p>}
                   </label>

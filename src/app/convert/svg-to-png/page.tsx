@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import SvgToPng from '@/components/SvgToPng'
 
 export const metadata: Metadata = {
   title: "SVG to PNG Online – Free Tool",
@@ -7,7 +8,9 @@ export const metadata: Metadata = {
 }
 function page() {
   return (
-    <div>page</div>
+    <div className='pt-[100px]'>
+      <SvgToPng />
+    </div>
   )
 }
 

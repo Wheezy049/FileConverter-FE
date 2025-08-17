@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 function page() {
   return (
     <div className='pt-[100px]'>
-        <PngToPdf />
+      <PngToPdf />
     </div>
   )
 }

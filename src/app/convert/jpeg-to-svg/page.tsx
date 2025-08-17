@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import JpegToSvg from '@/components/JpegToSvg'
 
 export const metadata: Metadata = {
   title: "JPEG to SVG Online – Free Converter",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 function page() {
   return (
-    <div>page</div>
+    <div className='pt-[100px]'>
+      <JpegToSvg />
+    </div>
   )
 }
 

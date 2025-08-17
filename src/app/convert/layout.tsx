@@ -8,13 +8,13 @@ export default function ToolLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <div className="bg-gray-50 w-full h-full">
-        <Navbar />
-        {children}
-        <div className="mb-10">
-         <Explore text="Related Products"/>
-         </div>
-        <Footer />
+    <div className="bg-gray-50 w-full h-full">
+      <Navbar />
+      {children}
+      <div className="mb-10">
+        <Explore text="Related Products" />
       </div>
+      <Footer />
+    </div>
   );
 }

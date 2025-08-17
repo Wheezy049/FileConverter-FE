@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import Mp4ToMp3 from '@/components/Mp4ToMp3'
 
 export const metadata: Metadata = {
   title: "MP4 to MP3 Online – Free & Fast",
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 function page() {
   return (
-    <div>page</div>
+    <div className='pt-[100px]'>
+      <Mp4ToMp3 />
+    </div>
   )
 }
 

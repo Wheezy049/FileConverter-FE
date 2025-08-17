@@ -7,7 +7,7 @@ interface CardProps {
     src: string;
 }
 
-export default function HowItWorks({ data, pageTitle }: {data: CardProps[], pageTitle: string}) {
+export default function HowItWorks({ data, pageTitle }: { data: CardProps[], pageTitle: string }) {
     return (
         <div className="w-[90%] sm:w-[85%] md:w-[100%] lg:max-w-[1300px] md:max-w-[900px] mx-auto mt-10 mb-10 space-y-5 md:space-y-7 md:p-6 lg:px-14">
             <h1 className="text-[24px] md:text-[40px] font-[500] leading-[32.78px] md:leading-[54.64px] text-center text-[#1F1F1F]">

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { apiFetch } from '@/lib/apiFetch';
 
-function PngToPdf() {
+function PngToSvg() {
 
     const [file, setFile] = useState<File | null>(null);
     const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -111,7 +111,7 @@ function PngToPdf() {
         formData.append("file", file);
 
         try {
-            const response = await apiFetch("/api/v1/convert/png-to-pdf", {
+            const response = await apiFetch("/api/v1/convert/png-to-svg", {
                 method: "POST",
                 body: formData,
             });
@@ -196,10 +196,10 @@ function PngToPdf() {
                 <div className="relative gap-[24px] w-full max-w-[700px] md:mb-12 flex flex-col items-center justify-center">
                     <div className="gap-[16px] flex flex-col items-center pt-[40px] relative">
                         <h1 className="text-[32px] md:text-[48px] lg:text-[48px] text-[#1A1A1A] font-bold leading-[40px] md:leading-[72px] text-center animate-slide-up opacity-0 animate-delay-[100ms]">
-                            PNG TO PDF
+                            PNG TO SVG
                         </h1>
                         <p className="text-[14px] md:text-[17px] font-medium leading-[24px] md:leading-[27.32px] text-center text-[#555555] animate-slide-up opacity-0 animate-delay-[200ms]">
-                            Convert PNG images into PDF documents for easy sharing and printing.
+                            Convert raster PNG images into vector-based SVG format.
                         </p>
                     </div>
                 </div>
@@ -499,4 +499,4 @@ function PngToPdf() {
     )
 }
 
-export default PngToPdf
+export default PngToSvg

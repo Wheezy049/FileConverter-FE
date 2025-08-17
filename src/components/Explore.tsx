@@ -2,13 +2,13 @@ import React from 'react'
 import ProductList from './ProductList'
 import { products } from '@/data/Product'
 
-function Explore({ text }: {text: string}) {
+function Explore({ text }: { text: string }) {
 
-  const getRandomItems = <T,>(arr: T[], num: number): T[] => {
-      const shuffled = [...arr].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, num);
+    const getRandomItems = <T,>(arr: T[], num: number): T[] => {
+        const shuffled = [...arr].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, num);
     };
-  
+
     const randomTools = getRandomItems(products, 6);
 
     return (

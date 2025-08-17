@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { apiFetch } from '@/lib/apiFetch';
 
-function PngToPdf() {
+function JpegToSvg() {
 
     const [file, setFile] = useState<File | null>(null);
     const [isComplete, setIsComplete] = useState<boolean>(false);
@@ -21,7 +21,7 @@ function PngToPdf() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const acceptedFormats = ["image/png"];
+        const acceptedFormats = ["image/jpeg"];
 
         const selectedFile = e.target.files?.[0];
 
@@ -34,7 +34,7 @@ function PngToPdf() {
             setFile(null);
             setPreviewImgUrl("");
             setIsComplete(false);
-            setErrMsg("Please upload a valid PNG file.");
+            setErrMsg("Please upload a valid JPG file.");
         }
     };
 
@@ -56,7 +56,7 @@ function PngToPdf() {
 
         const droppedFile = e.dataTransfer.files[0];
         const acceptedFormats = [
-            "image/png",
+            "image/jpeg",
         ];
 
         if (
@@ -68,7 +68,7 @@ function PngToPdf() {
             setErrMsg("");
         } else {
             setFile(null);
-            setErrMsg("Please upload a valid PNG file.");
+            setErrMsg("Please upload a valid JPG file.");
             setPreviewImgUrl("")
         }
     };
@@ -111,7 +111,7 @@ function PngToPdf() {
         formData.append("file", file);
 
         try {
-            const response = await apiFetch("/api/v1/convert/png-to-pdf", {
+            const response = await apiFetch("/api/v1/convert/jpeg-to-svg", {
                 method: "POST",
                 body: formData,
             });
@@ -196,10 +196,10 @@ function PngToPdf() {
                 <div className="relative gap-[24px] w-full max-w-[700px] md:mb-12 flex flex-col items-center justify-center">
                     <div className="gap-[16px] flex flex-col items-center pt-[40px] relative">
                         <h1 className="text-[32px] md:text-[48px] lg:text-[48px] text-[#1A1A1A] font-bold leading-[40px] md:leading-[72px] text-center animate-slide-up opacity-0 animate-delay-[100ms]">
-                            PNG TO PDF
+                            JPEG TO SVG
                         </h1>
                         <p className="text-[14px] md:text-[17px] font-medium leading-[24px] md:leading-[27.32px] text-center text-[#555555] animate-slide-up opacity-0 animate-delay-[200ms]">
-                            Convert PNG images into PDF documents for easy sharing and printing.
+                            Easily vectorize JPEG images into scalable SVG files.
                         </p>
                     </div>
                 </div>
@@ -428,7 +428,7 @@ function PngToPdf() {
                                     <div onDragOver={handleDragOver} onDrop={handleDrop}>
                                         <input
                                             type="file"
-                                            accept="image/png,"
+                                            accept="image/jpeg,"
                                             onChange={handleFileChange}
                                             className="hidden"
                                             id="fileUpload"
@@ -481,10 +481,10 @@ function PngToPdf() {
                                                 </g>
                                             </svg>
                                             <p className="text-[16px] md:text-[20px] text-[#475467] pt-3">
-                                                <span className="text-[#4A90E2] font-medium">Upload</span> or drag & drop your PNG file here.
+                                                <span className="text-[#4A90E2] font-medium">Upload</span> or drag & drop your JPG file here.
                                             </p>
                                             <span className="block text-[#71717A] text-sm md:text-base">
-                                                Maximum file size: 100MB (PNG only)
+                                                Maximum file size: 100MB (JPG only)
                                             </span>
                                             {errMsg && <p className="text-red-500 mt-2">{errMsg}</p>}
                                         </label>
@@ -499,4 +499,4 @@ function PngToPdf() {
     )
 }
 
-export default PngToPdf
+export default JpegToSvg

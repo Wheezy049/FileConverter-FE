@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 function page() {
   return (
     <div className='pb-[30px] pt-[100px]'>
-        <LoginForm />
+      <LoginForm />
     </div>
   )
 }
