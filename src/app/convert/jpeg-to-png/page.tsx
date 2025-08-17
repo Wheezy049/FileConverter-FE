@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import JpegToPng from '@/components/JpegToPng'
 
 export const metadata: Metadata = {
-  title: "Convert JPEG to PNG Online – Free & Secure",
+  title: "JPEG to PNG Online – Free & Secure",
   description: "Transform JPEG images into transparent PNGs in seconds. Fast, reliable, and completely free to use."
 }
 
